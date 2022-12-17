@@ -25,6 +25,9 @@ public class MainViewModel : ViewModel
    private Snippet? _selectedSnippet = null;
 
    private string? _searchText = null;
+
+   private int _selectedSearch = 0;
+   private bool _ignoreCase = false;
    #region Commands
    public Command UseSnippetCmd { get; init; }
    public Command ClearSnippetsCmd { get; init; }
@@ -176,12 +179,12 @@ public class MainViewModel : ViewModel
 
    private void Search()
    {
-      if (SearchText is null)
+      if (string.IsNullOrEmpty(SearchText))
       {
-         SnippetList.Clear();
+         SnippetList.ClearSearch();
          return;
       }
-      SnippetList.Search(SearchText);
+      SnippetList.Search(SearchText, SelectedSearch, IgnoreCase);
    }
 
    private void ClearSearch()
@@ -227,6 +230,26 @@ public class MainViewModel : ViewModel
       set
       {
          _searchText = value;
+         OnPropertyChanged();
+      }
+   }
+
+   public int SelectedSearch
+   {
+      get => _selectedSearch;
+      set
+      {
+         _selectedSearch = value;
+         OnPropertyChanged();
+      }
+   }
+
+   public bool IgnoreCase
+   {
+      get => _ignoreCase;
+      set
+      {
+         _ignoreCase = value;
          OnPropertyChanged();
       }
    }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using KiCadSnippetManager.Models.Utils;
+
 using MVVMLibrary;
 
 using Newtonsoft.Json;
@@ -15,6 +17,7 @@ namespace KiCadSnippetManager.Models
    public class SnippetCollection : Model, IList<Snippet>
    {
       #region Local Props
+      private readonly SearchComparer _searchComparer = new();
       private ObservableCollection<Snippet> _snippets = new();
       private ObservableCollection<Snippet>? _searchResults = null;
       public Snippet this[int index] { get => Snippets[index]; set => Snippets[index] = value; }
@@ -78,8 +81,27 @@ namespace KiCadSnippetManager.Models
       IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
       #region Search Methods
-      public void Search(string text, bool exludeTags = false) =>
-         SearchResults = new(Snippets.Where(snip => snip.Name.Contains(text) || (!exludeTags && snip.Tags.Contains(text))));
+      public void Search(string text, int searchParams, bool ignoreCase = false)
+      {
+         var searchText = ignoreCase ? text.ToLower() : text;
+         _searchComparer.IgnoreCase = ignoreCase;
+         switch (searchParams)
+         {
+            case 0:
+               SearchResults = new(Snippets.Where(snip => snip.Name.Contains(searchText, GetSearchType(ignoreCase)) || snip.Tags.Contains(searchText, _searchComparer)));
+               break;
+            case 1:
+               SearchResults = new(Snippets.Where(snip => snip.Name.Contains(searchText, GetSearchType(ignoreCase))));
+               break;
+            case 2:
+               SearchResults = new(Snippets.Where(snip => snip.Tags.Contains(searchText, _searchComparer)));
+               break;
+            default:
+               break;
+         }
+      }
+
+      private StringComparison GetSearchType(bool ignoreCase) => ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
 
       public void ClearSearch() => SearchResults = null;
       #endregion
@@ -108,6 +130,7 @@ namespace KiCadSnippetManager.Models
          {
             _searchResults = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(SnippetDisplay));
             OnPropertyChanged(nameof(IsSearching));
          }
       }

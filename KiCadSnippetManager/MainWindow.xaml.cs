@@ -35,7 +35,13 @@ namespace KiCadSnippetManager
 
       private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
       {
-
+         if (sender is ListBox lb)
+         {
+            if (lb.SelectedItem is string tag)
+            {
+               VM.SearchText = tag;
+            }
+         }
       }
 
       private void OpenNewSnippet_Click(object sender, RoutedEventArgs e)
