@@ -41,7 +41,7 @@ namespace KiCadSnippetManager
       private void OpenNewSnippet_Click(object sender, RoutedEventArgs e)
       {
          var newSnipVM = new NewSnippetViewModel(VM.SnippetList.Select(x => x.Name).ToArray());
-         var newSnippetView = new NewSnippetView(newSnipVM);
+         var newSnippetView = new EditSnippetView(newSnipVM);
          if (newSnippetView.ShowDialog() == true)
          {
             VM.NewSnippet(newSnipVM.Snippet);
@@ -55,7 +55,7 @@ namespace KiCadSnippetManager
             if (btn.DataContext is Snippet snip)
             {
                var newSnipVM = new NewSnippetViewModel(snip, VM.SnippetList.Select(x => x.Name).ToArray());
-               var editView = new NewSnippetView(newSnipVM);
+               var editView = new EditSnippetView(newSnipVM);
                if (editView.ShowDialog() == true)
                {
                   snip = newSnipVM.Snippet;

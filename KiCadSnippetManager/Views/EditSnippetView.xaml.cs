@@ -19,10 +19,10 @@ namespace KiCadSnippetManager.Views
    /// <summary>
    /// Interaction logic for NewSnippetView.xaml
    /// </summary>
-   public partial class NewSnippetView : Window
+   public partial class EditSnippetView : Window
    {
       public NewSnippetViewModel VM { get; set; }
-      public NewSnippetView(NewSnippetViewModel vm)
+      public EditSnippetView(NewSnippetViewModel vm)
       {
          VM = vm;
          DataContext = VM;
