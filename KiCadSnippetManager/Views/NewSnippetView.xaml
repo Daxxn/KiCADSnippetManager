@@ -1,0 +1,58 @@
+﻿<Window x:Class="KiCadSnippetManager.Views.NewSnippetView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KiCadSnippetManager.Views"
+        mc:Ignorable="d"
+        Title="New Snippet" Height="450" Width="400">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <TextBlock>Name</TextBlock>
+    <TextBox Grid.Row="1" Text="{Binding Path=Snippet.Name}"/>
+
+    <TextBlock Grid.Row="2">Tags</TextBlock>
+    <Grid Grid.Row="3">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <ListBox Grid.Column="0" SelectedItem="{Binding Path=TagText}" ItemsSource="{Binding Path=Snippet.Tags}">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Background="CadetBlue" Padding="2" Foreground="White" Text="{Binding}"/>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+        <ListBox.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel Orientation="Horizontal"/>
+          </ItemsPanelTemplate>
+        </ListBox.ItemsPanel>
+      </ListBox>
+      <TextBox Grid.Column="1" MinWidth="60" Text="{Binding Path=TagText, UpdateSourceTrigger=PropertyChanged}">
+        <TextBox.InputBindings>
+          <KeyBinding Key="Backspace" Modifiers="Ctrl" Command="{Binding Path=RemoveTagCmd}"/>
+          <KeyBinding Key="Return" Command="{Binding Path=NewTagCmd}"/>
+        </TextBox.InputBindings>
+      </TextBox>
+      <Button Grid.Column="2" Width="20" Height="20" Command="{Binding Path=NewTagCmd}">+</Button>
+      <Button Grid.Column="3" Width="20" Height="20" Command="{Binding Path=RemoveTagCmd}">-</Button>
+    </Grid>
+
+    <TextBlock Grid.Row="4">Snippet Data</TextBlock>
+    <TextBox Grid.Row="5" TextWrapping="NoWrap" AcceptsReturn="True" AcceptsTab="True" Text="{Binding Path=Snippet.Value, UpdateSourceTrigger=PropertyChanged}"/>
+
+    <Button Grid.Row="6" Click="Create_Click">Create</Button>
+  </Grid>
+</Window>

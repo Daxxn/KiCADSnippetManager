@@ -13,5 +13,6 @@ namespace KiCadSnippetManager.Models
       public string? SavePath { get; set; }
       public string? LastSavePath { get; set; }
       public bool AutoOpen { get; set; } = true;
+      public string[]? SaveLocations { get; set; }
    }
 }
