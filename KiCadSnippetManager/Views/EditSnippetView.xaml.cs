@@ -21,8 +21,8 @@ namespace KiCadSnippetManager.Views
    /// </summary>
    public partial class EditSnippetView : Window
    {
-      public NewSnippetViewModel VM { get; set; }
-      public EditSnippetView(NewSnippetViewModel vm)
+      public EditSnippetViewModel VM { get; set; }
+      public EditSnippetView(EditSnippetViewModel vm)
       {
          VM = vm;
          DataContext = VM;

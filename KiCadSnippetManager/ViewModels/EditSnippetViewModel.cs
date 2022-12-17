@@ -10,7 +10,7 @@ using MVVMLibrary;
 
 namespace KiCadSnippetManager.ViewModels
 {
-   public class NewSnippetViewModel : ViewModel
+   public class EditSnippetViewModel : ViewModel
    {
       #region Local Props
       public string[] CurrentNames { get; }
@@ -24,14 +24,14 @@ namespace KiCadSnippetManager.ViewModels
       #endregion
 
       #region Constructors
-      public NewSnippetViewModel(string[] currentNames)
+      public EditSnippetViewModel(string[] currentNames)
       {
          CurrentNames = currentNames;
          Snippet = new();
          Init();
       }
 
-      public NewSnippetViewModel(Snippet snippet, string[] currentNames)
+      public EditSnippetViewModel(Snippet snippet, string[] currentNames)
       {
          CurrentNames = currentNames;
          Snippet = snippet;
