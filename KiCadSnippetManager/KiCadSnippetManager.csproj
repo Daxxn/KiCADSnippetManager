@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JsonReaderLibrary" Version="1.0.0" />
+    <PackageReference Include="MVVMLibrary" Version="1.0.1" />
+    <PackageReference Include="SettingsLibrary" Version="2.1.0" />
+  </ItemGroup>
+
+</Project>

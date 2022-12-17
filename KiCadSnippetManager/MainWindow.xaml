@@ -1,0 +1,132 @@
+﻿<Window x:Class="KiCadSnippetManager.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:KiCadSnippetManager"
+        mc:Ignorable="d"
+        Title="KiCAD Snippets" Height="1000" Width="400">
+  <Window.Resources>
+    <Style TargetType="TextBlock" x:Key="TitleLabel">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Grid.ColumnSpan" Value="2"/>
+    </Style>
+    <Style TargetType="Border" x:Key="ControlsContainer">
+      <Setter Property="Margin" Value="0,10"/>
+    </Style>
+    <Style TargetType="Button">
+      <Setter Property="Background" Value="#FFD5ECED"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Margin" Value="1"/>
+    </Style>
+    <Style TargetType="TextBox">
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Background" Value="#FFB3D3D4"/>
+      <Setter Property="Margin" Value="1"/>
+    </Style>
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <Menu Grid.Row="0">
+      <MenuItem Header="File">
+        <MenuItem Header="Save" Command="{Binding Path=SaveCmd}">Save</MenuItem>
+        <MenuItem Header="Open" Command="{Binding Path=OpenCmd}">Open</MenuItem>
+      </MenuItem>
+    </Menu>
+    
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="100"/>
+        <ColumnDefinition Width="5"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <Border Grid.Row="0" Style="{StaticResource ControlsContainer}">
+            <StackPanel Orientation="Vertical">
+              <TextBlock FontSize="14">Snippet</TextBlock>
+              <Button Command="{Binding Path=NewSnippetCmd}">New</Button>
+              <Button Command="{Binding Path=DeleteSnippetCmd}">Delete</Button>
+            </StackPanel>
+          </Border>
+
+          <Border Grid.Row="1" Style="{StaticResource ControlsContainer}">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+              </Grid.RowDefinitions>
+              <TextBlock Style="{StaticResource TitleLabel}">Search</TextBlock>
+              <TextBox Grid.Row="1" Text="{Binding Path=SearchText}"/>
+              <Button Grid.Row="1" Grid.Column="1" Command="{Binding Path=SearchCmd}">Search</Button>
+            </Grid>
+          </Border>
+          
+          <Button Grid.Row="5" Command="{Binding Path=ClearSnippetsCmd}" FontSize="10">Clear All Snippets</Button>
+        </Grid>
+      </Border>
+
+      <GridSplitter x:Name="splitter" Grid.Column="1" ResizeDirection="Columns" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+
+      <Grid Grid.Column="2">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListBox ItemsSource="{Binding Path=SnippetList.SnippetDisplay}" SelectedItem="{Binding Path=SelectedSnippet}">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Path=Name}"/>
+                <ListView Grid.Column="3" ItemsSource="{Binding Path=Tags}" SelectionChanged="ListView_SelectionChanged">
+                  <ListView.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding}"/>
+                    </DataTemplate>
+                  </ListView.ItemTemplate>
+                  <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                      <WrapPanel/>
+                    </ItemsPanelTemplate>
+                  </ListView.ItemsPanel>
+                </ListView>
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="1" Background="{Binding ElementName=splitter, Path=Background}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Button Grid.Column="0" FontSize="16" Margin="2,0,4,0" Command="{Binding Path=UseSnippetCmd}">Clear Snippet</Button>
+          <Button Grid.Column="1" FontSize="16" Margin="4,0,2,0" Command="{Binding Path=UseSnippetCmd}">Use Snippet</Button>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>
