@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KiCadSnippetManager"
         mc:Ignorable="d"
-        Title="KiCAD Snippets" Height="1000" Width="400">
+        Title="KiCAD Snippets" Height="1000" Width="600">
   <Window.Resources>
     <Style TargetType="TextBlock" x:Key="TitleLabel">
       <Setter Property="FontSize" Value="14"/>
@@ -33,8 +33,8 @@
 
     <Menu Grid.Row="0">
       <MenuItem Header="File">
-        <MenuItem Header="Save" Command="{Binding Path=SaveCmd}">Save</MenuItem>
-        <MenuItem Header="Open" Command="{Binding Path=OpenCmd}">Open</MenuItem>
+        <MenuItem Header="Save" Command="{Binding Path=SaveCmd}"/>
+        <MenuItem Header="Open" Command="{Binding Path=OpenCmd}"/>
       </MenuItem>
     </Menu>
     
@@ -59,7 +59,7 @@
           <Border Grid.Row="0" Style="{StaticResource ControlsContainer}">
             <StackPanel Orientation="Vertical">
               <TextBlock FontSize="14">Snippet</TextBlock>
-              <Button Command="{Binding Path=NewSnippetCmd}">New</Button>
+              <Button Click="OpenNewSnippet_Click">New</Button>
               <Button Command="{Binding Path=DeleteSnippetCmd}">Delete</Button>
             </StackPanel>
           </Border>
@@ -92,28 +92,49 @@
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ListBox ItemsSource="{Binding Path=SnippetList.SnippetDisplay}" SelectedItem="{Binding Path=SelectedSnippet}">
+        <ListBox HorizontalContentAlignment="Stretch" ItemsSource="{Binding Path=SnippetList.SnippetDisplay}" SelectedItem="{Binding Path=SelectedSnippet}">
           <ListBox.ItemTemplate>
             <DataTemplate>
               <Grid Margin="4">
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="Auto"/>
-                  <ColumnDefinition Width="Auto"/>
                   <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="{Binding Path=Name}"/>
-                <ListView Grid.Column="3" ItemsSource="{Binding Path=Tags}" SelectionChanged="ListView_SelectionChanged">
-                  <ListView.ItemTemplate>
-                    <DataTemplate>
-                      <TextBlock Text="{Binding}"/>
-                    </DataTemplate>
-                  </ListView.ItemTemplate>
-                  <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                      <WrapPanel/>
-                    </ItemsPanelTemplate>
-                  </ListView.ItemsPanel>
-                </ListView>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <TextBlock Grid.Column="0" MinWidth="50" Margin="0,0,10,0" Text="{Binding Path=Name}"/>
+                
+                <Grid Grid.Column="1">
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                  </Grid.RowDefinitions>
+                  
+                  <TextBlock Height="10" FontSize="10">Tags</TextBlock>
+                  
+                  <ListBox Grid.Row="1" ItemsSource="{Binding Path=Tags}" SelectionChanged="ListView_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                      <DataTemplate>
+                        <TextBlock Text="{Binding}"/>
+                      </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                      </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                  </ListBox>
+                </Grid>
+                
+                <Button Grid.Column="2" Click="Edit_Click">Edit</Button>
+                
+                <Expander Grid.Row="1" MaxHeight="400" Grid.ColumnSpan="4">
+                  <TextBlock Text="{Binding Path=Value}" LineHeight="10"/>
+                </Expander>
               </Grid>
             </DataTemplate>
           </ListBox.ItemTemplate>

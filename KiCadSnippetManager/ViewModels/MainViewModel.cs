@@ -26,7 +26,6 @@ public class MainViewModel : ViewModel
 
    private string? _searchText = null;
    #region Commands
-   public Command NewSnippetCmd { get; init; }
    public Command UseSnippetCmd { get; init; }
    public Command ClearSnippetsCmd { get; init; }
    public Command ClearClipboardCmd { get; init; }
@@ -44,7 +43,6 @@ public class MainViewModel : ViewModel
    #region Constructors
    public MainViewModel()
    {
-      NewSnippetCmd = new(NewSnippet);
       UseSnippetCmd = new(UseSnippet);
       ClearSnippetsCmd = new(ClearSnippets);
       ClearClipboardCmd = new(ClearClipboard);
@@ -70,8 +68,9 @@ public class MainViewModel : ViewModel
             {
                AddExtension = true,
                DefaultExt = ".json",
-               CreatePrompt = true,
-               Title = "Save Snippets"
+               Title = "Save Snippets",
+               Filter = "Json|*.json|All Files|*.*",
+               CustomPlaces = App.Settings.SaveLocations != null ? new List<FileDialogCustomPlace>(App.Settings.SaveLocations.Select(x => new FileDialogCustomPlace(x))) : null,
             };
             if (dialog.ShowDialog() == true)
             {
@@ -115,6 +114,14 @@ public class MainViewModel : ViewModel
                SnippetList = snippets;
             }
          }
+         else
+         {
+            var snippets = await JsonReader.OpenJsonFileAsync<SnippetCollection>(App.Settings.SavePath);
+            if (snippets != null)
+            {
+               SnippetList = snippets;
+            }
+         }
       }
       catch (Exception e)
       {
@@ -130,7 +137,11 @@ public class MainViewModel : ViewModel
       App.Settings.SavePath = null;
    }
 
-   private void NewSnippet() => SelectedSnippet = SnippetList.Create();
+   public void NewSnippet(Snippet newSnippet)
+   {
+      SnippetList.Add(newSnippet);
+      SelectedSnippet = newSnippet;
+   }
 
    private void UseSnippet()
    {

@@ -13,6 +13,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using KiCadSnippetManager.Models;
+using KiCadSnippetManager.ViewModels;
+using KiCadSnippetManager.Views;
+
 namespace KiCadSnippetManager
 {
    /// <summary>
@@ -20,16 +24,44 @@ namespace KiCadSnippetManager
    /// </summary>
    public partial class MainWindow : Window
    {
+      public MainViewModel VM { get; set; }
       public MainWindow()
       {
-         DataContext = App.MainVM;
+         VM = App.MainVM;
+         DataContext = VM;
          InitializeComponent();
-         Loaded += App.MainVM.OnLoaded;
+         Loaded += VM.OnLoaded;
       }
 
       private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
       {
 
+      }
+
+      private void OpenNewSnippet_Click(object sender, RoutedEventArgs e)
+      {
+         var newSnipVM = new EditSnippetViewModel(VM.SnippetList.Select(x => x.Name).ToArray());
+         var newSnippetView = new EditSnippetView(newSnipVM);
+         if (newSnippetView.ShowDialog() == true)
+         {
+            VM.NewSnippet(newSnipVM.Snippet);
+         }
+      }
+
+      private void Edit_Click(object sender, RoutedEventArgs e)
+      {
+         if (sender is Button btn)
+         {
+            if (btn.DataContext is Snippet snip)
+            {
+               var newSnipVM = new EditSnippetViewModel(snip, VM.SnippetList.Select(x => x.Name).ToArray());
+               var editView = new EditSnippetView(newSnipVM);
+               if (editView.ShowDialog() == true)
+               {
+                  snip = newSnipVM.Snippet;
+               }
+            }
+         }
       }
    }
 }
